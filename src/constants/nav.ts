@@ -4,4 +4,7 @@ export const PATH = {
   LOGIN: "/login",
   LOGOUT: "/logout",
   DASHBOARD: "/dashboard",
+  bills: {
+    ROOT: "/bills",
+  },
 };
