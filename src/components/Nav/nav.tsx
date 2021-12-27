@@ -1,8 +1,7 @@
 import * as React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { PATH } from "../../constants/nav";
 import { useAuth } from "../../contexts/Auth";
-import { useModal } from "../../contexts/Modal";
 import useIsAuthorized from "../../hooks/use-isAuthorized";
 
 const linkStyle = (isActive: boolean) => {
@@ -16,6 +15,7 @@ const linkStyle = (isActive: boolean) => {
 const Nav: React.FC = () => {
   const { signOut, user } = useAuth();
   const isAuthorized = useIsAuthorized(user);
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -23,6 +23,7 @@ const Nav: React.FC = () => {
       if (error) {
         throw Error(error);
       }
+      navigate(PATH.LOGIN);
     } catch (error) {
       console.log("error on logout", error);
     }
@@ -64,9 +65,11 @@ const Nav: React.FC = () => {
           </>
         )}
       </div>
-      <button className={linkStyle(false)} onClick={handleLogout}>
-        Logout
-      </button>
+      {isAuthorized && (
+        <button className={linkStyle(false)} onClick={handleLogout}>
+          Logout
+        </button>
+      )}
     </div>
   );
 };

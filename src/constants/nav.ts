@@ -6,5 +6,8 @@ export const PATH = {
   DASHBOARD: "/dashboard",
   bills: {
     ROOT: "/bills",
+    ADD: "/bills/add",
+    VIEW: "/bills/view",
+    EDIT: "/bills/edit",
   },
 };
