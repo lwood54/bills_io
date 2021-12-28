@@ -13,15 +13,8 @@ export function Signup() {
 
   async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
-    const userPayload = {
-      email,
-      password,
-    };
-    console.log("data", userPayload);
     try {
-      console.log("getting here?");
       const { error } = await signUp({ email, password });
-      console.log("ERROR?", error);
       if (error) {
         throw Error(error);
       }

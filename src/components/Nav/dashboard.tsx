@@ -3,13 +3,13 @@ import { useAuth } from "../../contexts/Auth";
 
 const Dashboard: React.FC = () => {
   const { signOut, user } = useAuth();
-  React.useEffect(() => {
-    console.log("user info", user);
-  }, [user]);
 
   const handleLogout = async () => {
     try {
       const { error } = await signOut();
+      if (error) {
+        throw Error(error);
+      }
     } catch (error) {
       console.log("error on logout", error);
     }

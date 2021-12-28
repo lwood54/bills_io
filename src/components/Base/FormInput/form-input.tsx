@@ -1,8 +1,8 @@
 import * as React from "react";
-import Inline from "../Inline/inline";
-import Stack from "../Stack/stack";
 
 interface FormInputProps {
+  customClass?: string;
+  containerClass?: string;
   id: string;
   isStacked?: boolean;
   label?: string;
@@ -13,6 +13,8 @@ interface FormInputProps {
   value: string | number;
 }
 const FormInput: React.FC<FormInputProps> = ({
+  containerClass = "",
+  customClass = "",
   id,
   isStacked = true,
   label,
@@ -22,41 +24,18 @@ const FormInput: React.FC<FormInputProps> = ({
   type,
   value,
 }) => {
-  const renderInputGroup = React.useMemo(() => {
-    const getMargin = () => {
-      switch (scale) {
-        case "s":
-          return "mb-1";
-        case "m":
-          return "mb-2";
-        case "l":
-          return "mb-4";
-        case "xl":
-          return "mb-6";
-      }
-    };
-    return (
-      <div className={getMargin()}>
-        <label htmlFor={id}>{label}</label>
-        <input
-          onChange={(e) => onChange(e, id)}
-          type={type}
-          id={id}
-          placeholder={placeholder}
-          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-          value={value}
-        />
-      </div>
-    );
-  }, [label, id, type, placeholder, value]);
   return (
-    <>
-      {isStacked ? (
-        <Stack>{renderInputGroup}</Stack>
-      ) : (
-        <Inline>{renderInputGroup}</Inline>
-      )}
-    </>
+    <div className={`${containerClass} w-96`}>
+      <label htmlFor={id}>{label}</label>
+      <input
+        onChange={(e) => onChange(e, id)}
+        type={type}
+        id={id}
+        placeholder={placeholder}
+        className={`appearance-none w-full rounded-t py-3 px-4 leading-tight border border-b-4 border-b-teal-400 py-3 px-4 focus:outline-none focus:bg-teal-50 focus:border-teal-400 ${customClass}`}
+        value={value}
+      />
+    </div>
   );
 };
 

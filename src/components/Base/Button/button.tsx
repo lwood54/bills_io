@@ -1,17 +1,22 @@
 import * as React from "react";
 
 interface ButtonProps {
+  customClass?: string;
   label: string;
   onClick?: (e: React.MouseEvent) => void;
   style?: React.CSSProperties;
   type?: "button" | "submit" | "reset";
 }
 
-const Button: React.FC<ButtonProps> = ({ label, onClick, style, type }) => {
+const Button: React.FC<ButtonProps> = ({
+  customClass = "",
+  label,
+  onClick,
+  type,
+}) => {
   return (
     <button
-      style={style}
-      className="appearance-none block w-full bg-teal-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+      className={`appearance-none bg-teal-300 w-full h-14 rounded-t border-b-4 border-b-teal-600 hover:bg-teal-200 hover:border-b-teal-400 active:bg-sky-300 active:border-b-sky-600 ${customClass}`}
       onClick={onClick}
       type={type}
     >

@@ -14,8 +14,6 @@ const Login: React.FC = () => {
     e.preventDefault();
     try {
       const { error, session, user } = await signIn({ email, password });
-      console.log("session", session);
-      console.log("user", user);
       if (error) {
         setMessage(error.message);
         setPassword("");
