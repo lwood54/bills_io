@@ -1,43 +1,44 @@
 import * as React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Base/Button/button";
 import FormInput from "../../components/Base/FormInput/form-input";
 import { PATH } from "../../constants/nav";
+import { VALIDATION } from "../../constants/validation";
 import { useAuth } from "../../contexts/Auth";
-import { isNegative } from "../../helpers/numbers";
+import { isPositive } from "../../helpers/numbers";
 import { supabase } from "../../supabase";
+
+interface BillAddState {
+  name: string;
+  balance: number;
+  interest: number;
+  dayDue: number;
+  payment: number;
+  user_id: string;
+}
 
 const BillAdd: React.FC = () => {
   const { user } = useAuth();
-  const [formState, setFormState] = React.useState({
-    name: "",
-    balance: 0,
-    interestRate: 0,
-    dayDue: 1,
-    payment: 0,
-    user_id: user.id,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<BillAddState>({
+    defaultValues: {
+      name: "",
+      balance: 0,
+      interest: 0,
+      dayDue: 1,
+      payment: 0,
+      user_id: user.id,
+    },
   });
   const navigate = useNavigate();
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: string
-  ) => {
-    const val = e.currentTarget.value;
-    if (field === "balance" && isNegative(val)) return;
-    if (field === "interestRate" && isNegative(val)) return;
-    if (field === "dayDue" && Number(val) > 31) return;
-    if (field === "payment" && isNegative(val)) return;
-    setFormState({
-      ...formState,
-      [field]: val,
-    });
-  };
-
-  const handleAddBill = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
+  const handleAddBill: SubmitHandler<BillAddState> = async (data) => {
     try {
-      const { error } = await supabase.from("bills").insert([formState]);
+      const { error } = await supabase.from("bills").insert([data]);
       if (error) {
         throw Error(error.message);
       }
@@ -46,51 +47,62 @@ const BillAdd: React.FC = () => {
       console.log("add bill error", error);
     }
   };
-
   return (
     <>
       <div className="w-full flex justify-center">
         <form
-          onSubmit={(e) => handleAddBill(e)}
+          onSubmit={handleSubmit(handleAddBill)}
           className="flex flex-wrap gap-2 max-w-4xl mt-4 justify-center align-center"
         >
           <FormInput
             id="name"
-            type="text"
+            {...register("name", {
+              required: VALIDATION.REQUIRED,
+            })}
+            error={errors?.name?.message}
             label="Name"
-            onChange={(e) => handleChange(e, "name")}
-            value={formState.name}
           />
           <FormInput
             id="balance"
-            type="number"
+            {...register("balance", {
+              required: "This is a required field",
+              validate: (v) => isPositive(v, true) || VALIDATION.POS_INT,
+            })}
+            error={errors?.balance?.message}
             label="Balance"
-            onChange={(e) => handleChange(e, "balance")}
-            value={formState.balance}
           />
           <FormInput
-            id="interestRate"
-            type="number"
-            label="Interest"
-            onChange={(e) => handleChange(e, "interestRate")}
-            value={formState.interestRate}
+            id="interest"
+            {...register("interest", {
+              required: "This is a required field",
+              validate: (v) => isPositive(v, true) || VALIDATION.POS_INT,
+            })}
+            error={errors?.interest?.message}
+            label="Interest %"
           />
           <FormInput
             id="dayDue"
-            type="number"
+            {...register("dayDue", {
+              required: "This is a required field",
+              validate: {
+                positive: (v) => isPositive(v) || VALIDATION.GREATER_THAN_ZERO,
+                lessThan30: (v) => Number(v) < 32 || VALIDATION.LESS_THAN_32,
+              },
+            })}
+            error={errors?.dayDue?.message}
             label="Day Due"
-            onChange={(e) => handleChange(e, "dayDue")}
-            value={formState.dayDue}
           />
           <FormInput
             id="payment"
-            type="number"
+            {...register("payment", {
+              required: "This is a required field",
+              validate: (v) => isPositive(v, true) || VALIDATION.POS_INT,
+            })}
+            error={errors?.payment?.message}
             label="Payment"
-            onChange={(e) => handleChange(e, "payment")}
-            value={formState.payment}
           />
           <Button
-            customClass="w-96 mt-[24px] h-[48px]"
+            customClass="w-96 mt-[24px] h-[49px]"
             label="Add Bill"
             type="submit"
           />
