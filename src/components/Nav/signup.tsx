@@ -18,7 +18,7 @@ export function Signup() {
       if (error) {
         throw Error(error);
       }
-      navigate(PATH.DASHBOARD);
+      navigate(PATH.HOME);
     } catch (error) {
       console.log(error);
     }

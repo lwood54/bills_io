@@ -36,9 +36,15 @@ const Nav: React.FC = () => {
           <>
             <NavLink
               className={({ isActive }) => linkStyle(isActive)}
-              to={PATH.DASHBOARD}
+              to={PATH.HOME}
             >
-              Dashboard
+              Home
+            </NavLink>
+            <NavLink
+              className={({ isActive }) => linkStyle(isActive)}
+              to={PATH.PROFILE}
+            >
+              Profile
             </NavLink>
             <NavLink
               className={({ isActive }) => linkStyle(isActive)}

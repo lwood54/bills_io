@@ -1,13 +1,14 @@
 export const PATH = {
-  ROOT: "/",
-  SIGNUP: "/signup",
-  LOGIN: "/login",
-  LOGOUT: "/logout",
-  DASHBOARD: "/dashboard",
+  PROFILE: "/profile",
   bills: {
     ROOT: "/bills",
     ADD: "/bills/add",
     VIEW: "/bills/view",
     EDIT: "/bills/edit",
   },
+  HOME: "/home",
+  ROOT: "/",
+  SIGNUP: "/signup",
+  LOGIN: "/login",
+  LOGOUT: "/logout",
 };
