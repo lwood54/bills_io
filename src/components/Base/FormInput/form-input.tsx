@@ -1,6 +1,6 @@
 import * as React from "react";
 
-interface InputProps {
+interface FormInputProps {
   customClass?: string;
   containerClass?: string;
   defaultValue?: string | number;
@@ -9,7 +9,7 @@ interface InputProps {
   label: string;
   placeholder?: string;
 }
-const FormInput: React.FC<InputProps> = React.forwardRef(
+const FormInput: React.FC<FormInputProps> = React.forwardRef(
   (
     {
       containerClass = "",
