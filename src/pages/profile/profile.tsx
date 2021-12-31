@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Avatar } from "../../components/avatar";
+import Text from "../../components/Base/Text/text";
 import EditIcon from "../../components/Icons/edit-icon";
 import { useAuth } from "../../contexts/Auth";
 import { supabase } from "../../supabase";
@@ -83,6 +84,7 @@ const Profile: React.FC = () => {
         "Loading..."
       ) : (
         <>
+          <Text as="h2">stuff here</Text>
           <EditIcon onClick={(e) => console.log(e)} />
           <h1>Profile</h1>
           <h3>Email:</h3>
