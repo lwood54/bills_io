@@ -1,5 +1,8 @@
 import * as React from "react";
 import { supabase } from "../supabase";
+import Button from "./Base/Button/button";
+import EditIcon from "./Icons/edit-icon";
+import UploadIcon from "./Icons/upload-icon";
 
 interface AvatarProps {
   url: string;
@@ -9,6 +12,7 @@ interface AvatarProps {
 export const Avatar: React.FC<AvatarProps> = ({ url, size, onUpload }) => {
   const [avatarUrl, setAvatarUrl] = React.useState<string | null>(null);
   const [uploading, setUploading] = React.useState(false);
+  const [displayType, setDisplayType] = React.useState("hidden");
 
   React.useEffect(() => {
     if (url) downloadImage(url);
@@ -61,12 +65,33 @@ export const Avatar: React.FC<AvatarProps> = ({ url, size, onUpload }) => {
   }
 
   return (
-    <div>
+    <div
+      className="rounded relative"
+      onMouseEnter={() => setDisplayType("block")}
+      onMouseLeave={() => setDisplayType("hidden")}
+    >
+      <label
+        className={`${displayType} cursor-pointer absolute flex justify-center items-center w-full h-full bg-sky-600 rounded-3xl active:bg-sky-500`}
+        htmlFor="single"
+      >
+        <UploadIcon color="#e0f2fe" />
+      </label>
+      <input
+        style={{
+          visibility: "hidden",
+          position: "absolute",
+        }}
+        type="file"
+        id="single"
+        accept="image/*"
+        onChange={uploadAvatar}
+        disabled={uploading}
+      />
       {avatarUrl ? (
         <img
           src={avatarUrl}
           alt="Avatar"
-          className="avatar image"
+          className="rounded-3xl"
           style={{ height: size, width: size }}
         />
       ) : (
@@ -75,10 +100,7 @@ export const Avatar: React.FC<AvatarProps> = ({ url, size, onUpload }) => {
           style={{ height: size, width: size }}
         />
       )}
-      <div style={{ width: size }}>
-        <label className="button primary block" htmlFor="single">
-          {uploading ? "Uploading ..." : "Upload"}
-        </label>
+      {/* <div>
         <input
           style={{
             visibility: "hidden",
@@ -90,7 +112,7 @@ export const Avatar: React.FC<AvatarProps> = ({ url, size, onUpload }) => {
           onChange={uploadAvatar}
           disabled={uploading}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

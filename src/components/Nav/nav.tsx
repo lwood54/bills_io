@@ -5,11 +5,11 @@ import { useAuth } from "../../contexts/Auth";
 import useIsAuthorized from "../../hooks/use-isAuthorized";
 
 const linkStyle = (isActive: boolean) => {
-  const base = "w-24 p-1 text-center hover:bg-emerald-300 cursor-pointer";
+  const base = "w-24 p-1 text-center hover:bg-teal-300 cursor-pointer";
   if (isActive) {
-    return `${base} hover:rounded-t-md border-b-2 border-emerald-600`;
+    return `${base} hover:rounded-t-md border-b-2 border-teal-600`;
   }
-  return `${base} hover:rounded-md`;
+  return `${base} hover:rounded-md active:bg-sky-300`;
 };
 
 const Nav: React.FC = () => {
@@ -30,7 +30,7 @@ const Nav: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-between w-full p-2 bg-emerald-400">
+    <div className="flex justify-between w-full p-2 bg-teal-400">
       <div className="flex gap-2">
         {isAuthorized && (
           <>

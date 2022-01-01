@@ -1,16 +1,43 @@
 import * as React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 import { Avatar } from "../../components/avatar";
+import Button from "../../components/Base/Button/button";
+import FormInput from "../../components/Base/FormInput/form-input";
 import Text from "../../components/Base/Text/text";
+import CloseIcon from "../../components/Icons/close-icon";
 import EditIcon from "../../components/Icons/edit-icon";
+import { VALIDATION } from "../../constants/validation";
 import { useAuth } from "../../contexts/Auth";
 import { supabase } from "../../supabase";
 
+interface ProfileState {
+  username: string;
+  website: string;
+  avatar_url: string;
+  id: string;
+}
 const Profile: React.FC = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
+  const {
+    getValues,
+    setValue,
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProfileState>({
+    defaultValues: {
+      username: "",
+      website: "",
+      avatar_url: "",
+      id: user?.id,
+    },
+  });
+
   const [isLoading, setIsLoading] = React.useState(false);
-  const [username, setUsername] = React.useState("");
-  const [website, setWebsite] = React.useState("");
-  const [avatar_url, setAvatar_url] = React.useState("");
+  const [isEdit, setIsEdit] = React.useState(false);
 
   async function getProfile() {
     try {
@@ -28,9 +55,14 @@ const Profile: React.FC = () => {
       }
       console.log("data", data);
       if (data) {
-        setUsername(data.username);
-        setWebsite(data.website);
-        setAvatar_url(data.avatar_url);
+        reset({
+          username: data.username,
+          website: data.website,
+          avatar_url: data.avatar_url,
+          id: user?.id,
+        });
+      } else {
+        console.log("no data here");
       }
     } catch (error) {
       console.log("error", error);
@@ -43,28 +75,16 @@ const Profile: React.FC = () => {
     getProfile();
   }, []);
 
-  async function updateProfile({
-    username,
-    website,
-    avatar_url,
-  }: {
-    username: string;
-    website: string;
-    avatar_url: string;
-  }) {
+  const handleUpdateProfile: SubmitHandler<ProfileState> = async (data) => {
+    console.log("payload data: ", data);
     try {
       setIsLoading(true);
-      const user = supabase.auth.user();
-
       const updates = {
-        id: user?.id,
-        username,
-        website,
-        avatar_url,
+        ...data,
         updated_at: new Date(),
       };
 
-      let { error } = await supabase.from("profiles").upsert(updates, {
+      const { error } = await supabase.from("profiles").upsert(updates, {
         returning: "minimal", // Don't return the value after inserting
       });
 
@@ -75,8 +95,9 @@ const Profile: React.FC = () => {
       console.log("error updating profile", error);
     } finally {
       setIsLoading(false);
+      setIsEdit(false);
     }
-  }
+  };
 
   return (
     <>
@@ -84,22 +105,66 @@ const Profile: React.FC = () => {
         "Loading..."
       ) : (
         <>
-          <Text as="h2">stuff here</Text>
-          <EditIcon onClick={(e) => console.log(e)} />
-          <h1>Profile</h1>
-          <h3>Email:</h3>
-          <h4>{user?.email}</h4>
-          <hr />
-          <h3>Username:</h3>
-          <h4>{username}</h4>
-          <Avatar
-            url={avatar_url}
-            size={150}
-            onUpload={(url) => {
-              setAvatar_url(url);
-              updateProfile({ username, website, avatar_url: url });
-            }}
-          />
+          <div className="w-full flex justify-center flex-wrap p-4">
+            <div
+              className="flex justify-end cursor-pointer w-full"
+              onClick={() => setIsEdit(!isEdit)}
+            >
+              {!isEdit ? <EditIcon /> : <CloseIcon />}
+            </div>
+            <div className="m-4">
+              <Avatar
+                url={getValues("avatar_url")}
+                size={150}
+                onUpload={(url) => {
+                  setValue("avatar_url", url);
+                  handleUpdateProfile(getValues());
+                }}
+              />
+            </div>
+            <div className="flex flex-wrap gap-2 max-w-xl mt-4 justify-center">
+              {user?.email && (
+                <Text className="w-full pb-2" as="h3">
+                  {user.email}
+                </Text>
+              )}
+              {isEdit ? (
+                <form onSubmit={handleSubmit(handleUpdateProfile)}>
+                  <FormInput
+                    id="username"
+                    {...register("username", {
+                      required: VALIDATION.REQUIRED,
+                    })}
+                    error={errors?.username?.message}
+                    label="Username"
+                  />
+                  <FormInput
+                    id="website"
+                    {...register("website")}
+                    label="Website"
+                  />
+                  <Button
+                    customClass="w-96 mt-[24px] h-[49px]"
+                    label="Update"
+                    type="submit"
+                  />
+                </form>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  <Text className="w-full" as="h4">
+                    {getValues("username")}
+                  </Text>
+                  <a
+                    className="w-full rounded-full active:bg-emerald-400 hover:bg-sky-200 flex justify-center items-center"
+                    href={getValues("website")}
+                    target="_blank"
+                  >
+                    {getValues("website")}
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
         </>
       )}
     </>

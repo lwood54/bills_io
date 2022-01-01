@@ -1,13 +1,23 @@
 import * as React from "react";
 
+type HeadingType = "h1" | "h2" | "h3" | "h4";
+type ParagraphType = "b1" | "b2" | "b3" | "b4";
+
 interface TextProps {
-  as: "h1" | "h2" | "h3" | "h4" | "b1" | "b2" | "b3" | "b4";
+  as: HeadingType | ParagraphType;
+  className?: string;
+  textPosition?: "left" | "center" | "right" | "justify";
 }
 
 const HType = ["h1", "h2", "h3", "h4"];
 const PType = ["b1", "b2", "b3", "b4"];
 
-const Text: React.FC<TextProps> = ({ as, children }) => {
+const Text: React.FC<TextProps> = ({
+  as,
+  children,
+  className,
+  textPosition = "center",
+}) => {
   const isPType = PType.includes(as);
   const isHType = HType.includes(as);
 
@@ -36,9 +46,13 @@ const Text: React.FC<TextProps> = ({ as, children }) => {
     }
   };
 
-  const TextComponent = isPType ? "p" : (as as "h1" | "h2" | "h3" | "h4");
+  const TextComponent = isPType ? "p" : (as as HeadingType);
   return (
-    <TextComponent className={`${getTextSize(as)}`}>{children}</TextComponent>
+    <TextComponent
+      className={`${getTextSize(as)} text-${textPosition} ${className}`}
+    >
+      {children}
+    </TextComponent>
   );
 };
 
