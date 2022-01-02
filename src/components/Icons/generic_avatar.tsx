@@ -5,14 +5,14 @@ interface GenericAvatarProps extends IconProps {}
 
 const GenericAvatar: React.FC<GenericAvatarProps> = ({
   className = "fill-teal-300 stroke-teal-300",
-  vbHeight = 612,
-  vbWidth = 612,
+  viewboxHeight = 612,
+  viewboxWidth = 612,
   onClick,
 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={className}
-    viewBox={`0 0 ${vbWidth} ${vbHeight}`}
+    viewBox={`0 0 ${viewboxWidth} ${viewboxHeight}`}
     onClick={onClick}
   >
     <path

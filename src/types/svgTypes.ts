@@ -1,10 +1,12 @@
 export interface IconProps {
-  activeColor?: string;
+  activeStroke?: string;
+  activeFill?: string;
   className?: string;
-  fillColor?: string;
-  hoverColor?: string;
+  fill?: string;
+  hoverFill?: string;
+  hoverStroke?: string;
   onClick?: (e: React.SyntheticEvent) => void;
-  strokeColor?: string;
-  vbWidth?: number;
-  vbHeight?: number;
+  stroke?: string;
+  viewboxWidth?: number;
+  viewboxHeight?: number;
 }
