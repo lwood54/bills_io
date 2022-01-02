@@ -9,14 +9,14 @@ interface EditIconProps extends IconProps {
 }
 const EditIcon: React.FC<EditIconProps> = ({
   className = ICON_STYLES.defaultIconButtonStyles,
-  vbHeight = 24,
-  vbWidth = 24,
+  viewboxHeight = 24,
+  viewboxWidth = 24,
   onClick,
 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={className}
-    viewBox={`0 0 ${vbWidth} ${vbHeight}`}
+    viewBox={`0 0 ${viewboxWidth} ${viewboxHeight}`}
     onClick={onClick}
   >
     <path

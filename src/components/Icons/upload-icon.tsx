@@ -4,14 +4,14 @@ import { IconProps } from "../../types/svgTypes";
 interface UploadIconProps extends IconProps {}
 const UploadIcon: React.FC<UploadIconProps> = ({
   className = "h-6 w-6 hover:stroke-slate-400 active:stroke-sky-600 fill-transparent stroke-sky-100",
-  vbHeight = 24,
-  vbWidth = 24,
+  viewboxHeight = 24,
+  viewboxWidth = 24,
   onClick,
 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={className}
-    viewBox={`0 0 ${vbWidth} ${vbHeight}`}
+    viewBox={`0 0 ${viewboxWidth} ${viewboxHeight}`}
     onClick={onClick}
   >
     <path
