@@ -1,7 +1,6 @@
 import * as React from "react";
 import { supabase } from "../supabase";
-import Button from "./Base/Button/button";
-import EditIcon from "./Icons/edit-icon";
+import GenericAvatar from "./Icons/generic_avatar";
 import UploadIcon from "./Icons/upload-icon";
 
 interface AvatarProps {
@@ -66,15 +65,15 @@ export const Avatar: React.FC<AvatarProps> = ({ url, size, onUpload }) => {
 
   return (
     <div
-      className="rounded relative"
+      className="rounded relative flex justify-center md:justify-between"
       onMouseEnter={() => setDisplayType("block")}
       onMouseLeave={() => setDisplayType("hidden")}
     >
       <label
-        className={`${displayType} cursor-pointer absolute flex justify-center items-center w-full h-full bg-sky-600 rounded-3xl active:bg-sky-500`}
+        className={`${displayType} cursor-pointer absolute flex justify-center items-center w-36 h-36 bg-sky-600/75 rounded-full active:bg-sky-500`}
         htmlFor="single"
       >
-        <UploadIcon color="#e0f2fe" />
+        <UploadIcon />
       </label>
       <input
         style={{
@@ -88,31 +87,12 @@ export const Avatar: React.FC<AvatarProps> = ({ url, size, onUpload }) => {
         disabled={uploading}
       />
       {avatarUrl ? (
-        <img
-          src={avatarUrl}
-          alt="Avatar"
-          className="rounded-3xl"
-          style={{ height: size, width: size }}
-        />
+        <img src={avatarUrl} alt="Avatar" className="rounded-full w-36 h-36" />
       ) : (
-        <div
-          className="avatar no-image"
-          style={{ height: size, width: size }}
-        />
+        <div className="h-36 w-36">
+          <GenericAvatar />
+        </div>
       )}
-      {/* <div>
-        <input
-          style={{
-            visibility: "hidden",
-            position: "absolute",
-          }}
-          type="file"
-          id="single"
-          accept="image/*"
-          onChange={uploadAvatar}
-          disabled={uploading}
-        />
-      </div> */}
     </div>
   );
 };

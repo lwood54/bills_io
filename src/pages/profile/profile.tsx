@@ -1,6 +1,5 @@
 import * as React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
 import { Avatar } from "../../components/avatar";
 import Button from "../../components/Base/Button/button";
 import FormInput from "../../components/Base/FormInput/form-input";
@@ -18,7 +17,6 @@ interface ProfileState {
   id: string;
 }
 const Profile: React.FC = () => {
-  const navigate = useNavigate();
   const { user } = useAuth();
   const {
     getValues,
@@ -35,6 +33,7 @@ const Profile: React.FC = () => {
       id: user?.id,
     },
   });
+  const { avatar_url, website, username } = getValues();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -42,7 +41,6 @@ const Profile: React.FC = () => {
   async function getProfile() {
     try {
       setIsLoading(true);
-      console.log("user", user);
 
       let { data, error, status } = await supabase
         .from("profiles")
@@ -53,7 +51,7 @@ const Profile: React.FC = () => {
       if (error && status !== 406) {
         throw error;
       }
-      console.log("data", data);
+
       if (data) {
         reset({
           username: data.username,
@@ -61,8 +59,6 @@ const Profile: React.FC = () => {
           avatar_url: data.avatar_url,
           id: user?.id,
         });
-      } else {
-        console.log("no data here");
       }
     } catch (error) {
       console.log("error", error);
@@ -104,68 +100,68 @@ const Profile: React.FC = () => {
       {isLoading ? (
         "Loading..."
       ) : (
-        <>
-          <div className="w-full flex justify-center flex-wrap p-4">
+        <div className="flex justify-center w-full ">
+          <div className="flex w-[800px] justify-around md:justify-center flex-wrap flex-col md:flex-row p-4">
             <div
               className="flex justify-end cursor-pointer w-full"
               onClick={() => setIsEdit(!isEdit)}
             >
               {!isEdit ? <EditIcon /> : <CloseIcon />}
             </div>
-            <div className="m-4">
-              <Avatar
-                url={getValues("avatar_url")}
-                size={150}
-                onUpload={(url) => {
-                  setValue("avatar_url", url);
-                  handleUpdateProfile(getValues());
-                }}
-              />
-            </div>
-            <div className="flex flex-wrap gap-2 max-w-xl mt-4 justify-center">
+            <Avatar
+              url={avatar_url}
+              size={150}
+              onUpload={(url) => {
+                setValue("avatar_url", url);
+                handleUpdateProfile(getValues());
+              }}
+            />
+            <div className="mt-10 md:mt-0 md:ml-5 w-96">
               {user?.email && (
                 <Text className="w-full pb-2" as="h3">
                   {user.email}
                 </Text>
               )}
               {isEdit ? (
-                <form onSubmit={handleSubmit(handleUpdateProfile)}>
-                  <FormInput
-                    id="username"
-                    {...register("username", {
-                      required: VALIDATION.REQUIRED,
-                    })}
-                    error={errors?.username?.message}
-                    label="Username"
-                  />
-                  <FormInput
-                    id="website"
-                    {...register("website")}
-                    label="Website"
-                  />
-                  <Button
-                    customClass="w-96 mt-[24px] h-[49px]"
-                    label="Update"
-                    type="submit"
-                  />
-                </form>
+                <>
+                  <form onSubmit={handleSubmit(handleUpdateProfile)}>
+                    <FormInput
+                      id="username"
+                      {...register("username", {
+                        required: VALIDATION.REQUIRED,
+                      })}
+                      error={errors?.username?.message}
+                      label="Username"
+                    />
+                    <FormInput
+                      id="website"
+                      {...register("website")}
+                      label="Website"
+                    />
+                    <Button
+                      customClass="w-96 mt-[24px] h-[49px]"
+                      label="Update"
+                      type="submit"
+                    />
+                  </form>
+                </>
               ) : (
-                <div className="flex flex-wrap gap-2">
+                <>
                   <Text className="w-full" as="h4">
-                    {getValues("username")}
+                    {username}
                   </Text>
                   <a
                     className="w-full rounded-full active:bg-emerald-400 hover:bg-sky-200 flex justify-center items-center"
-                    href={getValues("website")}
+                    href={website}
                     target="_blank"
                   >
-                    {getValues("website")}
+                    {website}
                   </a>
-                </div>
+                </>
               )}
             </div>
           </div>
-        </>
+        </div>
       )}
     </>
   );
