@@ -5,8 +5,8 @@ interface IconBaseProps extends IconProps {}
 const IconBase: React.FC<IconBaseProps> = ({
   className,
   children,
-  viewboxHeight,
-  viewboxWidth,
+  viewboxHeight = 24,
+  viewboxWidth = 24,
   onClick,
 }) => (
   <svg

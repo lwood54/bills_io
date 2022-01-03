@@ -1,5 +1,6 @@
 import * as React from "react";
 import { IconProps } from "../../types/svgTypes";
+import IconBase from "../Base/IconBase/icon-base";
 
 interface GenericAvatarProps extends IconProps {}
 
@@ -7,14 +8,9 @@ const GenericAvatar: React.FC<GenericAvatarProps> = ({
   className = "fill-teal-300 stroke-teal-300",
   viewboxHeight = 612,
   viewboxWidth = 612,
-  onClick,
+  ...rest
 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    viewBox={`0 0 ${viewboxWidth} ${viewboxHeight}`}
-    onClick={onClick}
-  >
+  <IconBase {...{ className, viewboxHeight, viewboxWidth, ...rest }}>
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -30,7 +26,7 @@ const GenericAvatar: React.FC<GenericAvatarProps> = ({
      c21.106,16.408,46.838,25.732,74.955,25.732c28.117,0,54.644-10.119,75.75-26.527c83.556,42.935,96.784,117.89,99.169,142.104
      c-47.633,38.237-108.493,61.655-174.052,61.655C240.478,583.955,180.34,561.331,132.707,523.023z"
     />
-  </svg>
+  </IconBase>
 );
 
 export default GenericAvatar;

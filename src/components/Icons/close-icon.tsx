@@ -1,27 +1,21 @@
 import * as React from "react";
-import { ICON_STYLES } from "../../constants/iconStyles";
+import { DEF_ICON_BUTTON } from "../../constants/iconStyles";
 import { IconProps } from "../../types/svgTypes";
+import IconBase from "../Base/IconBase/icon-base";
 
 interface CloseIconProps extends IconProps {}
 const CloseIcon: React.FC<CloseIconProps> = ({
-  className = ICON_STYLES.defaultIconButtonStyles,
-  viewboxHeight = 24,
-  viewboxWidth = 24,
-  onClick,
+  className = DEF_ICON_BUTTON,
+  ...rest
 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    viewBox={`0 0 ${viewboxWidth} ${viewboxHeight}`}
-    onClick={onClick}
-  >
+  <IconBase {...{ className, ...rest }}>
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"
       d="M6 18L18 6M6 6l12 12"
     />
-  </svg>
+  </IconBase>
 );
 
 export default CloseIcon;
