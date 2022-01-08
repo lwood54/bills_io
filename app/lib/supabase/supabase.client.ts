@@ -1,22 +1,6 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
-import { loadScript } from './load-script';
+import { createClient } from '@supabase/supabase-js';
 
-let _supabaseClient: SupabaseClient | null;
-export async function getSupabaseClient(useToken = true) {
-  if (!_supabaseClient) {
-    const supabase = await loadScript();
-    _supabaseClient = supabase?.createClient(
-      window.ENV.SB_URL,
-      window.ENV.SB_ANON_KEY
-    ) as SupabaseClient;
-    if (useToken) {
-      fetch('/config')
-        .then((res) => res.json())
-        .then((config) => {
-          if (config && config.supabaseToken)
-            _supabaseClient?.auth.setAuth(config.supabaseToken);
-        });
-    }
-  }
-  return _supabaseClient;
-}
+const SB_URL = window.ENV.SB_URL as string;
+const SB_PUBLIC_ANON_KEY = window.ENV.SB_ANON_KEY as string;
+
+export const supabaseClient = createClient(SB_URL, SB_PUBLIC_ANON_KEY);
