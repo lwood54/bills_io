@@ -1,7 +1,8 @@
-import { ActionFunction, Form } from 'remix';
+import { ActionFunction, Form, useTransition } from 'remix';
 import { useActionData, MetaFunction, redirect, json } from 'remix';
 import { supabaseToken } from '../../cookies';
 import { supabase } from '../../lib/supabase/supabase.server';
+import { Button, Container, Input, Stack, Text, theme } from '@chakra-ui/react';
 
 export let meta: MetaFunction = () => {
   return {
@@ -31,20 +32,48 @@ export let action: ActionFunction = async ({ request }) => {
 
 export default function Login() {
   const actionData = useActionData();
+  const { state } = useTransition();
+
   return (
     <Form method="post">
-      {actionData?.error && <h2>{actionData?.error?.message}</h2>}
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" name="email" type="email" required />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input id="password" name="password" type="password" required />
-      </div>
-      <button type="submit" title="Login">
-        Login
-      </button>
+      <Container>
+        <Stack p="4">
+          {actionData?.error && <h2>{actionData?.error?.message}</h2>}
+
+          <div>
+            <Text fontSize="2xl">Email</Text>
+            <Input
+              focusBorderColor="brand.secondary"
+              id="email"
+              name="email"
+              type="email"
+              required
+              size="lg"
+            />
+          </div>
+          <div>
+            <Text fontSize="2xl">Password</Text>
+            <Input
+              focusBorderColor="brand.secondary"
+              id="password"
+              name="password"
+              type="password"
+              required
+              size="lg"
+            />
+          </div>
+          <Button
+            type="submit"
+            size="lg"
+            colorScheme="teal"
+            disabled={state === 'submitting'}
+            isLoading={state === 'submitting'}
+            spinnerPlacement="start"
+          >
+            Login
+          </Button>
+        </Stack>
+      </Container>
     </Form>
   );
 }

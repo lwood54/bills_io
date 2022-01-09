@@ -13,6 +13,21 @@ import type { LinksFunction, LoaderFunction } from 'remix';
 import appStyleUrl from '~/styles/app.css';
 import Layout from './components/Layout';
 import { isAuthenticated } from './lib/auth';
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { theme_colors } from './styles/theme_styles/colors';
+// const theme_colors = {
+//   text: {
+//     primary: '#2D3748', // Gray[700]
+//     secondary: '#A0AEC0', // Gray[400]
+//     disabled: '#E2E8F0', // Gray[200]
+//   },
+//   brand: {
+//     primary: '#38B2AC', // Teal[400],
+//     secondary: '#0BC5EA', // Cyan[400]
+//   },
+// };
+
+const theme = extendTheme({ colors: theme_colors });
 
 export let links: LinksFunction = () => {
   return [
@@ -32,9 +47,11 @@ export let links: LinksFunction = () => {
 export default function App() {
   return (
     <Document>
-      <Layout>
-        <Outlet />
-      </Layout>
+      <ChakraProvider theme={theme}>
+        <Layout>
+          <Outlet />
+        </Layout>
+      </ChakraProvider>
     </Document>
   );
 }
@@ -102,10 +119,12 @@ export function CatchBoundary() {
 
   return (
     <Document title={`${caught.status} ${caught.statusText}`}>
-      <h1>
-        {caught.status}: {caught.statusText}
-      </h1>
-      <p>{renderMessage}</p>
+      <ChakraProvider>
+        <h1>
+          {caught.status}: {caught.statusText}
+        </h1>
+        <p>{renderMessage}</p>
+      </ChakraProvider>
     </Document>
   );
 }
@@ -113,10 +132,12 @@ export function CatchBoundary() {
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
     <Document title="Error!">
-      <div>
-        <h1>There was an error</h1>
-        <p>{error.message}</p>
-      </div>
+      <ChakraProvider>
+        <div>
+          <h1>There was an error</h1>
+          <p>{error.message}</p>
+        </div>
+      </ChakraProvider>
     </Document>
   );
 }
