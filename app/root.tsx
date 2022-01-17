@@ -13,6 +13,11 @@ import type { LinksFunction, LoaderFunction } from 'remix';
 import appStyleUrl from '~/styles/app.css';
 import Layout from './components/Layout';
 import { isAuthenticated } from './lib/auth';
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { theme_colors } from './styles/theme_styles/colors';
+import Nav from './components/Nav/Nav';
+
+const theme = extendTheme({ colors: theme_colors });
 
 export let links: LinksFunction = () => {
   return [
@@ -30,11 +35,15 @@ export let links: LinksFunction = () => {
 };
 
 export default function App() {
+  const data = useLoaderData();
   return (
     <Document>
-      <Layout>
-        <Outlet />
-      </Layout>
+      <ChakraProvider theme={theme}>
+        <Nav isLoggedIn={data.isAuthorized} />
+        <Layout>
+          <Outlet />
+        </Layout>
+      </ChakraProvider>
     </Document>
   );
 }
@@ -43,12 +52,10 @@ export let loader: LoaderFunction = async ({ request }) => {
   const isAuth = await isAuthenticated(request);
   return {
     ENV: {
-      SOME_SECRET: process?.env?.SOME_SECRET,
       SB_URL: process?.env?.SB_URL,
       SB_ANON_KEY: process?.env?.SB_ANON_KEY,
     },
     isAuthorized: isAuth,
-    data: 'some',
   };
 };
 
@@ -60,6 +67,7 @@ function Document({
   title?: string;
 }) {
   const data = useLoaderData();
+
   return (
     <html lang="en">
       <head>
@@ -102,10 +110,12 @@ export function CatchBoundary() {
 
   return (
     <Document title={`${caught.status} ${caught.statusText}`}>
-      <h1>
-        {caught.status}: {caught.statusText}
-      </h1>
-      <p>{renderMessage}</p>
+      <ChakraProvider>
+        <h1>
+          {caught.status}: {caught.statusText}
+        </h1>
+        <p>{renderMessage}</p>
+      </ChakraProvider>
     </Document>
   );
 }
@@ -113,10 +123,12 @@ export function CatchBoundary() {
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
     <Document title="Error!">
-      <div>
-        <h1>There was an error</h1>
-        <p>{error.message}</p>
-      </div>
+      <ChakraProvider>
+        <div>
+          <h1>There was an error</h1>
+          <p>{error.message}</p>
+        </div>
+      </ChakraProvider>
     </Document>
   );
 }
