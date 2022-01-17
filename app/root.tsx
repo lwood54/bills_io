@@ -15,17 +15,7 @@ import Layout from './components/Layout';
 import { isAuthenticated } from './lib/auth';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { theme_colors } from './styles/theme_styles/colors';
-// const theme_colors = {
-//   text: {
-//     primary: '#2D3748', // Gray[700]
-//     secondary: '#A0AEC0', // Gray[400]
-//     disabled: '#E2E8F0', // Gray[200]
-//   },
-//   brand: {
-//     primary: '#38B2AC', // Teal[400],
-//     secondary: '#0BC5EA', // Cyan[400]
-//   },
-// };
+import Nav from './components/Nav/Nav';
 
 const theme = extendTheme({ colors: theme_colors });
 
@@ -45,9 +35,11 @@ export let links: LinksFunction = () => {
 };
 
 export default function App() {
+  const data = useLoaderData();
   return (
     <Document>
       <ChakraProvider theme={theme}>
+        <Nav isLoggedIn={data.isAuthorized} />
         <Layout>
           <Outlet />
         </Layout>
@@ -60,12 +52,10 @@ export let loader: LoaderFunction = async ({ request }) => {
   const isAuth = await isAuthenticated(request);
   return {
     ENV: {
-      SOME_SECRET: process?.env?.SOME_SECRET,
       SB_URL: process?.env?.SB_URL,
       SB_ANON_KEY: process?.env?.SB_ANON_KEY,
     },
     isAuthorized: isAuth,
-    data: 'some',
   };
 };
 
@@ -77,6 +67,7 @@ function Document({
   title?: string;
 }) {
   const data = useLoaderData();
+
   return (
     <html lang="en">
       <head>

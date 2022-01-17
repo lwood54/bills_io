@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import * as React from 'react';
 import {
   LoaderFunction,
   redirect,
@@ -12,6 +12,18 @@ import { User } from '@supabase/supabase-js';
 import { getUserByRequestToken, isAuthenticated } from '~/lib/auth';
 import { supabase } from '~/lib/supabase/supabase.server';
 import { supabaseClient } from '~/lib/supabase';
+import {
+  Avatar,
+  Container,
+  HStack,
+  IconButton,
+  Stack,
+  VStack,
+  Text,
+  Button,
+  Input,
+} from '@chakra-ui/react';
+import { EditIcon } from '@chakra-ui/icons';
 
 type Profile = {
   username?: string;
@@ -19,29 +31,31 @@ type Profile = {
   avatar_url?: string;
 };
 
-export let loader: LoaderFunction = async ({ request, params }) => {
-  if (!(await isAuthenticated(request))) return redirect('/auth');
+export const loader: LoaderFunction = async ({ request, params }) => {
+  const { user } = await getUserByRequestToken(request);
+  if (!(await isAuthenticated(request))) return redirect('/login');
   const { data: profile, error } = await supabase
     .from('profiles')
     .select(`username, website, avatar_url`)
     .eq('id', params.id)
     .single();
-  if (!profile)
-    throw new Response('Not Found', {
-      status: 404,
-    });
-  return { profile, error };
+  return { profile, user, error };
 };
 
-export let action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request }) => {
   const { user } = await getUserByRequestToken(request);
   const form = await request.formData();
   const username = form.get('username');
   const website = form.get('website');
+  const avatarUrl = form.get('avatar');
 
-  const { error } = await supabase
-    .from('profiles')
-    .upsert({ username, website, id: user.id, updated_at: new Date() });
+  const { error } = await supabase.from('profiles').upsert({
+    username,
+    website,
+    id: user.id,
+    avatar_url: avatarUrl,
+    updated_at: new Date(),
+  });
   if (error) {
     return { error };
   }
@@ -52,8 +66,11 @@ export default function ProfileEdit() {
   const transition = useTransition();
   const { profile, user } = useLoaderData<{ profile: Profile; user?: User }>();
   const errors = useActionData<Profile>();
-  const [avatarUrl, setAvatarUrl] = useState<string>(profile?.avatar_url || '');
-  const [avatarLoading, setAvatarLoading] = useState<boolean>(false);
+  const [avatarUrl, setAvatarUrl] = React.useState<string>(
+    profile?.avatar_url || ''
+  );
+  const avatarRef = React.useRef({} as HTMLInputElement);
+  const [avatarLoading, setAvatarLoading] = React.useState<boolean>(false);
 
   async function handleFileChange(event: any) {
     if (!event.target.files || event.target.files.length === 0) {
@@ -64,17 +81,14 @@ export default function ProfileEdit() {
     const fileName = `${Math.random()}.${fileExt}`;
     const filePath = `${fileName}`;
     setAvatarLoading(true);
-    let resp = await supabaseClient.storage
+    const resp = await supabaseClient.storage
       .from('avatars')
       .upload(filePath, file);
     if (resp?.error) {
       throw resp.error;
     }
 
-    supabaseClient
-      .from('profiles')
-      .upsert({ id: user?.id, avatar_url: filePath });
-    let downloadingImage = new Image();
+    const downloadingImage = new Image();
     downloadingImage.onload = function () {
       setAvatarUrl(filePath);
       setAvatarLoading(false);
@@ -83,71 +97,85 @@ export default function ProfileEdit() {
   }
 
   return (
-    <div>
-      Profile Picture
-      <img src={`/images/avatars/${avatarUrl}`} alt={profile?.username} />
-      <div>
-        <div>
-          <div>
-            <div>
-              <label>
-                <span>Choose profile photo</span>
-                <input
-                  type="file"
-                  name="avatar-upload"
-                  style={{
-                    backgroundColor: 'violet',
-                    border: '1px solid black',
-                  }}
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-              </label>
-            </div>
-            <small>
-              {avatarLoading
-                ? `updating...`
-                : `choose an image file to update your profile pic`}
-            </small>
-          </div>
-          <br />
-          <div>Profile Details</div>
-          <Form method="post">
-            <fieldset>
-              <div>
-                <label htmlFor="username">Username</label>
-                <input
+    <Container p="4">
+      <Stack spacing={4} justifyContent="center">
+        <HStack spacing={4}>
+          <VStack alignItems="flex-start" width="150px">
+            <Avatar src={`/images/avatars/${avatarUrl}`} size="2xl" />
+            <input
+              ref={avatarRef}
+              style={{ display: 'none' }}
+              type="file"
+              id="avatar-upload"
+              name="avatar-upload"
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+            <IconButton
+              isRound
+              variant="outline"
+              colorScheme="teal"
+              aria-label="change avatar"
+              fontSize="20px"
+              onClick={() => avatarRef.current.click()}
+              icon={<EditIcon />}
+            />
+          </VStack>
+          <VStack width="100%" alignItems="flex-start">
+            <Form method="post" style={{ width: '100%' }}>
+              <input
+                // NOTE: adds url string to hidden field to submit string to db
+                type="hidden"
+                name="avatar"
+                id="avatar-url-value"
+                value={avatarUrl}
+              />
+              <VStack alignItems="flex-start" width="100%">
+                <Text>Username</Text>
+                <Input
                   id="username"
                   name="username"
                   type="text"
                   required
-                  defaultValue={profile.username}
+                  defaultValue={profile?.username}
                 />
-                <div>{errors?.username && errors.username}</div>
-              </div>
-              <div>
-                <label htmlFor="website">Website</label>
-                <input
+                {errors?.username && (
+                  <Text border="1px solid red" color="red.500">
+                    {errors.username}
+                  </Text>
+                )}
+                <Text>Website</Text>
+                <Input
                   id="website"
                   name="website"
                   type="text"
                   required
-                  defaultValue={profile.website}
+                  defaultValue={profile?.website}
                 />
-                <div>{errors?.website && errors.website}</div>
-              </div>
-              <div>
-                <button
+                {errors?.website && (
+                  <Text border="1px solid red" color="red.500">
+                    {errors.website}
+                  </Text>
+                )}
+                <Button
+                  colorScheme="teal"
+                  width="100%"
+                  color="teal.50"
+                  p="4"
+                  size="xs"
                   type="submit"
-                  disabled={transition.state === 'submitting'}
+                  disabled={transition.state === 'submitting' || avatarLoading}
+                  rounded="sm"
+                  borderBottomColor="teal.700"
+                  borderBottomWidth="4px"
                 >
-                  Update Profile
-                </button>
-              </div>
-            </fieldset>
-          </Form>
-        </div>
-      </div>
-    </div>
+                  Save Profile Changes
+                </Button>
+              </VStack>
+            </Form>
+          </VStack>
+        </HStack>
+      </Stack>
+    </Container>
   );
 }
