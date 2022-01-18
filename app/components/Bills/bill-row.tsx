@@ -22,7 +22,7 @@ const BillRow: React.FC<BillRowProps> = ({ bill, isAlt }) => {
     >
       <h2>
         <AccordionButton>
-          <Box flex="1" textAlign="left">
+          <Box flex="1" textAlign="left" fontWeight="semibold">
             {bill.name}: {formatToMoney(bill.balance)}
           </Box>
           <AccordionIcon />

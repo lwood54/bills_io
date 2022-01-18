@@ -31,8 +31,6 @@ type LoaderData = {
 
 export let loader: LoaderFunction = async ({ request }) => {
   if (!(await isAuthenticated(request))) return redirect(PATH.LOGIN);
-  const session = supabase.auth.session();
-  console.log('SESSION IN PROFILE =====> ', session);
   const { user } = await getUserByRequestToken(request);
   const { data: profile, error } = await supabase
     .from('profiles')

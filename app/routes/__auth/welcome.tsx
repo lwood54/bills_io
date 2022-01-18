@@ -1,6 +1,6 @@
-import { Button, Text } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'remix';
 import { PATH } from '~/lib/constants/nav-constants';
 
 const Welcome: React.FC = () => {

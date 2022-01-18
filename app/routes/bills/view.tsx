@@ -1,11 +1,20 @@
 import * as React from 'react';
-import { Accordion, Heading, Stack } from '@chakra-ui/react';
-import { LoaderFunction, useLoaderData } from 'remix';
+import {
+  Accordion,
+  Container,
+  Heading,
+  HStack,
+  IconButton,
+  Stack,
+} from '@chakra-ui/react';
+import { LoaderFunction, useLoaderData, useNavigate } from 'remix';
 import { supabase } from '~/lib/supabase/supabase.server';
 import { getUserByRequestToken } from '~/lib/auth';
 import { PostgrestError, User } from '@supabase/supabase-js';
 import BillRow from '~/components/Bills/bill-row';
 import { Bill } from '~/lib/types/bills-types';
+import { AddIcon } from '@chakra-ui/icons';
+import { PATH } from '~/lib/constants/nav-constants';
 
 interface LoaderData {
   data: Bill[];
@@ -26,17 +35,32 @@ interface ViewBillProps {
 }
 const ViewBill: React.FC<ViewBillProps> = ({ name }) => {
   const { data: bills } = useLoaderData<LoaderData>();
+  const navigate = useNavigate();
+
+  const handleAddBill = () => {
+    navigate(PATH.BILLS.ADD);
+  };
   return (
-    <Stack>
-      <Heading textAlign="center" color="cyan.600">
-        View Bills
-      </Heading>
-      <Accordion allowToggle px="4">
-        {bills.map((bill, i) => (
-          <BillRow key={bill.id} isAlt={i % 2 === 0} bill={bill} />
-        ))}
-      </Accordion>
-    </Stack>
+    <Container maxW="860px" justifyContent="center">
+      <Stack>
+        <HStack p="4" justifyContent="space-between">
+          <Heading color="cyan.600">View Bills</Heading>
+          <IconButton
+            colorScheme="cyan"
+            color="cyan.50"
+            rounded="full"
+            aria-label="add-bill"
+            icon={<AddIcon />}
+            onClick={handleAddBill}
+          />
+        </HStack>
+        <Accordion allowToggle px="4">
+          {bills.map((bill, i) => (
+            <BillRow key={bill.id} isAlt={i % 2 === 0} bill={bill} />
+          ))}
+        </Accordion>
+      </Stack>
+    </Container>
   );
 };
 
