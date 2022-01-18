@@ -4,15 +4,8 @@ import { LoaderFunction, useLoaderData } from 'remix';
 import { supabase } from '~/lib/supabase/supabase.server';
 import { getUserByRequestToken } from '~/lib/auth';
 import { PostgrestError, User } from '@supabase/supabase-js';
-
-interface Bill {
-  id: number;
-  name: string;
-  balance: number;
-  dayDue: number;
-  interest: number;
-  payment: number;
-}
+import BillRow from '~/components/Bills/bill-row';
+import { Bill } from '~/lib/types/bills-types';
 
 interface LoaderData {
   data: Bill[];
@@ -21,25 +14,30 @@ interface LoaderData {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  // NOTE: getUserByRequestToken is required for each page that
+  // requires the session/authorized user to access row level data
   const { user } = await getUserByRequestToken(request);
   let { data, error } = await supabase.from('bills').select('*');
   return { data, error, user };
 };
 
-interface AddBillProps {
+interface ViewBillProps {
   name: string;
 }
-const AddBill: React.FC<AddBillProps> = ({ name }) => {
+const ViewBill: React.FC<ViewBillProps> = ({ name }) => {
   const { data: bills } = useLoaderData<LoaderData>();
-
   return (
     <Stack>
-      <Heading textAlign="center">Add a Bill</Heading>
+      <Heading textAlign="center" color="cyan.600">
+        View Bills
+      </Heading>
       <Accordion allowToggle px="4">
-        stuff
+        {bills.map((bill, i) => (
+          <BillRow key={bill.id} isAlt={i % 2 === 0} bill={bill} />
+        ))}
       </Accordion>
     </Stack>
   );
 };
 
-export default AddBill;
+export default ViewBill;

@@ -7,5 +7,6 @@ export const PATH = {
   BILLS: {
     ADD: '/bills/add',
     EDIT: '/bills/edit',
+    VIEW: '/bills/view',
   },
 };

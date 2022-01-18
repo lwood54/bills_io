@@ -75,6 +75,9 @@ const NavMenu: React.FC<NavMenuProps> = ({
                     </AccordionButton>
                   </h2>
                   <AccordionPanel pb={4}>
+                    <Link to={PATH.BILLS.VIEW} onClick={toggleMenuOpen}>
+                      <NavMenuButton>View Bills</NavMenuButton>
+                    </Link>
                     <Link to={PATH.BILLS.ADD} onClick={toggleMenuOpen}>
                       <NavMenuButton>Add Bill</NavMenuButton>
                     </Link>
