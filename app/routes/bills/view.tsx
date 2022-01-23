@@ -7,7 +7,7 @@ import {
   IconButton,
   Stack,
 } from '@chakra-ui/react';
-import { LoaderFunction, useLoaderData, useNavigate } from 'remix';
+import { LoaderFunction, redirect, useLoaderData, useNavigate } from 'remix';
 import { supabase } from '~/lib/supabase/supabase.server';
 import { getUserByRequestToken } from '~/lib/auth';
 import { PostgrestError, User } from '@supabase/supabase-js';
@@ -26,6 +26,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   // NOTE: getUserByRequestToken is required for each page that
   // requires the session/authorized user to access row level data
   const { user } = await getUserByRequestToken(request);
+  if (!user) {
+    throw redirect(PATH.LOGIN);
+  }
   let { data, error } = await supabase.from('bills').select('*');
   return { data, error, user };
 };

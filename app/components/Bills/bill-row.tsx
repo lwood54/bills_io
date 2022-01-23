@@ -5,16 +5,26 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  HStack,
+  IconButton,
   Text,
 } from '@chakra-ui/react';
 import { Bill } from '~/lib/types/bills-types';
 import { formatToMoney } from '~/lib/helpers/bills-helpers';
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 
 interface BillRowProps {
   isAlt: boolean;
   bill: Bill;
 }
 const BillRow: React.FC<BillRowProps> = ({ bill, isAlt }) => {
+  const handleRemoveBill = () => {
+    console.log('remove bill');
+  };
+
+  const handleEditBill = () => {
+    console.log('edit bill');
+  };
   return (
     <AccordionItem
       bgColor={isAlt ? 'cyan.50' : 'cyan.600'}
@@ -29,9 +39,31 @@ const BillRow: React.FC<BillRowProps> = ({ bill, isAlt }) => {
         </AccordionButton>
       </h2>
       <AccordionPanel pb={4} bgColor="gray.500" color="teal.50">
-        <Text>Day Due: {bill.dayDue}</Text>
-        <Text>Interest: {bill.interest}%</Text>
-        <Text>Default Payment: {formatToMoney(bill.payment)}</Text>
+        <HStack justifyContent="space-between">
+          <div>
+            <Text>Day Due: {bill.dayDue}</Text>
+            <Text>Interest: {bill.interest}%</Text>
+            <Text>Default Payment: {formatToMoney(bill.payment)}</Text>
+          </div>
+          <HStack justifyContent="space-around">
+            <IconButton
+              colorScheme="cyan"
+              color="cyan.50"
+              rounded="full"
+              aria-label="delete-bill"
+              icon={<DeleteIcon />}
+              onClick={handleRemoveBill}
+            />
+            <IconButton
+              colorScheme="cyan"
+              color="cyan.50"
+              rounded="full"
+              aria-label="edit-bill"
+              icon={<EditIcon />}
+              onClick={handleEditBill}
+            />
+          </HStack>
+        </HStack>
       </AccordionPanel>
     </AccordionItem>
   );
