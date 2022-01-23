@@ -52,6 +52,7 @@ export let loader: LoaderFunction = async ({ request }) => {
   const isAuth = await isAuthenticated(request);
   return {
     ENV: {
+      SOME_SECRET: process?.env?.SOME_SECRET,
       SB_URL: process?.env?.SB_URL,
       SB_ANON_KEY: process?.env?.SB_ANON_KEY,
     },

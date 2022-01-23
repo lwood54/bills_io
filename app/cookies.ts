@@ -1,6 +1,6 @@
 import { createCookie } from 'remix';
 
-export let supabaseToken = createCookie('sb:token', {
+export const supabaseToken = createCookie('sb:token', {
   httpOnly: true,
   secure: false,
   sameSite: 'lax',

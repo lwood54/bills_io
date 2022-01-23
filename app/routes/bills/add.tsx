@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  Accordion,
   Button,
   FormControl,
   FormErrorMessage,
@@ -8,7 +7,6 @@ import {
   Heading,
   Input,
   Stack,
-  Text,
 } from '@chakra-ui/react';
 import {
   ActionFunction,
@@ -25,6 +23,8 @@ import { PostgrestError, User } from '@supabase/supabase-js';
 import { useForm } from 'react-hook-form';
 import { isPositive } from '~/lib/helpers/bills-helpers';
 import { PATH } from '~/lib/constants/nav-constants';
+import { dataToFormData } from '~/lib/helpers/conversions';
+import FormInput from '~/components/Base/FormInput/form-input';
 
 export const VALIDATION = {
   GREATER_THAN_ZERO: 'Should be greater than 0',
@@ -50,6 +50,9 @@ interface LoaderData {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const { user } = await getUserByRequestToken(request);
+  if (!user) {
+    return redirect(PATH.LOGIN);
+  }
   return { user };
 };
 
@@ -78,6 +81,8 @@ const AddBill: React.FC<AddBillProps> = ({ name }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<Bill>({
+    mode: 'all',
+    reValidateMode: 'onChange',
     defaultValues: {
       name: '',
       balance: 0,
@@ -89,91 +94,65 @@ const AddBill: React.FC<AddBillProps> = ({ name }) => {
   });
 
   const onSubmit = (data: Bill) => {
-    submit(data, { method: 'post' });
+    submit(dataToFormData(data), { method: 'post' });
   };
 
   return (
     <Stack>
       <Heading textAlign="center">Add a Bill</Heading>
       <Form onSubmit={handleSubmit(onSubmit)} method="post">
-        <FormControl isInvalid={Boolean(errors.name?.message)}>
-          <FormLabel htmlFor="name">Name</FormLabel>
-          <Input
-            id="name"
-            type="text"
-            placeholder="Name"
-            {...register('name', {
-              required: 'This is a required field',
-            })}
-          />
-          <FormErrorMessage>
-            {errors.name && errors.name.message}
-          </FormErrorMessage>
-        </FormControl>
-        <FormControl isInvalid={Boolean(errors.balance?.message)}>
-          <FormLabel htmlFor="balance">Balance</FormLabel>
-          <Input
-            id="balance"
-            type="number"
-            placeholder="Balance"
-            {...register('balance', {
-              required: 'This is a required field',
-              validate: (v) => isPositive(v, true) || VALIDATION.POS_INT,
-            })}
-          />
-          <FormErrorMessage>
-            {errors.balance && errors.balance.message}
-          </FormErrorMessage>
-        </FormControl>
-        <FormControl isInvalid={Boolean(errors.interest?.message)}>
-          <FormLabel htmlFor="interest">Interest</FormLabel>
-          <Input
-            id="interest"
-            type="number"
-            placeholder="Interest"
-            {...register('interest', {
-              required: 'This is a required field',
-              validate: (v) => isPositive(v, true) || VALIDATION.POS_INT,
-            })}
-          />
-          <FormErrorMessage>
-            {errors.interest && errors.interest.message}
-          </FormErrorMessage>
-        </FormControl>
-        <FormControl isInvalid={Boolean(errors.dayDue?.message)}>
-          <FormLabel htmlFor="dayDue">Day Due</FormLabel>
-          <Input
-            id="dayDue"
-            type="number"
-            placeholder="Day Due"
-            {...register('dayDue', {
-              required: 'This is a required field',
-              validate: {
-                positive: (v) => isPositive(v) || VALIDATION.GREATER_THAN_ZERO,
-                lessThan30: (v) => Number(v) < 32 || VALIDATION.LESS_THAN_32,
-              },
-            })}
-          />
-          <FormErrorMessage>
-            {errors.dayDue && errors.dayDue.message}
-          </FormErrorMessage>
-        </FormControl>
-        <FormControl isInvalid={Boolean(errors.payment?.message)}>
-          <FormLabel htmlFor="payment">Payment</FormLabel>
-          <Input
-            id="payment"
-            type="number"
-            placeholder="payment"
-            {...register('payment', {
-              required: 'This is a required field',
-              validate: (v) => isPositive(v, true) || VALIDATION.POS_INT,
-            })}
-          />
-          <FormErrorMessage>
-            {errors.payment && errors.payment.message}
-          </FormErrorMessage>
-        </FormControl>
-
+        <FormInput
+          id="name"
+          error={errors.name}
+          {...register('name', {
+            required: 'This is a required field',
+          })}
+          placeholder="Name"
+          label="Name"
+        />
+        <FormInput
+          id="balance"
+          error={errors.balance}
+          {...register('balance', {
+            required: 'This is a required field',
+            validate: (v) => isPositive(v, true) || VALIDATION.POS_INT,
+          })}
+          placeholder="Balance"
+          label="Balance"
+        />
+        <FormInput
+          id="interest"
+          error={errors.interest}
+          {...register('interest', {
+            required: 'This is a required field',
+            validate: (v) => isPositive(v, true) || VALIDATION.POS_INT,
+          })}
+          placeholder="Interest"
+          label="Interest"
+        />
+        <FormInput
+          id="dayDue"
+          error={errors.dayDue}
+          {...register('dayDue', {
+            required: 'This is a required field',
+            validate: {
+              positive: (v) => isPositive(v) || VALIDATION.GREATER_THAN_ZERO,
+              lessThan30: (v) => Number(v) < 32 || VALIDATION.LESS_THAN_32,
+            },
+          })}
+          placeholder="Day Due"
+          label="Day Due"
+        />
+        <FormInput
+          id="payment"
+          error={errors.payment}
+          {...register('payment', {
+            required: 'This is a required field',
+            validate: (v) => isPositive(v, true) || VALIDATION.POS_INT,
+          })}
+          placeholder="Payment"
+          label="Payment"
+        />
         <Button type="submit">Add Bill</Button>
       </Form>
     </Stack>
