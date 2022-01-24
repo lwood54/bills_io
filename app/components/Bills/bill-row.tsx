@@ -12,18 +12,21 @@ import {
 import { Bill } from '~/lib/types/bills-types';
 import { formatToMoney } from '~/lib/helpers/bills-helpers';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { useNavigate } from 'remix';
+import { PATH } from '~/lib/constants/nav-constants';
 
 interface BillRowProps {
   isAlt: boolean;
   bill: Bill;
 }
 const BillRow: React.FC<BillRowProps> = ({ bill, isAlt }) => {
+  const navigate = useNavigate();
   const handleRemoveBill = () => {
     console.log('remove bill');
   };
 
   const handleEditBill = () => {
-    console.log('edit bill');
+    navigate(PATH.BILLS.EDIT.replace(':uuid', `${bill.id}`));
   };
   return (
     <AccordionItem

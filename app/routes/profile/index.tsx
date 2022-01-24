@@ -34,7 +34,7 @@ export let loader: LoaderFunction = async ({ request }) => {
   const { user } = await getUserByRequestToken(request);
   const { data: profile, error } = await supabase
     .from('profiles')
-    .select(`username, website, avatar_url`)
+    .select('username, website, avatar_url')
     .eq('id', user.id)
     .single();
   return { ...profile, user, error };

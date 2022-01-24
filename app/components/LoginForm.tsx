@@ -47,6 +47,8 @@ const LoginForm: React.FC<LoginFormProps> = ({
             disabled={isSubmitting}
             isLoading={isSubmitting}
             spinnerPlacement="start"
+            borderBottomColor="teal.700"
+            borderBottomWidth="4px"
           >
             {isLogin ? 'Login' : 'Sign Up'}
           </Button>

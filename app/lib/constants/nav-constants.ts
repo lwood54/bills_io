@@ -5,8 +5,8 @@ export const PATH = {
   SIGN_OUT: '/signout',
   PROFILE: '/profile',
   BILLS: {
-    ADD: '/bills/add',
-    EDIT: '/bills/edit',
+    ADD: '/bills/add/modify',
+    EDIT: '/bills/:uuid/modify',
     VIEW: '/bills/view',
   },
 };
