@@ -6,6 +6,7 @@ export const PATH = {
   PROFILE: '/profile',
   BILLS: {
     ADD: '/bills/add/modify',
+    DELETE: '/bills/:uuid/remove',
     EDIT: '/bills/:uuid/modify',
     VIEW: '/bills/view',
   },

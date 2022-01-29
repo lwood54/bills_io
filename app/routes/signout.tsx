@@ -4,7 +4,7 @@ import { supabaseToken } from '../cookies';
 import { getToken } from '../lib/auth';
 import { PATH } from '~/lib/constants/nav-constants';
 
-export let action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request }) => {
   const token = await getToken(request);
   const { error } = await supabase.auth.api.signOut(token!);
   if (error) {

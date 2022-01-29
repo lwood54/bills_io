@@ -15,6 +15,7 @@ import BillRow from '~/components/Bills/bill-row';
 import { Bill } from '~/lib/types/bills-types';
 import { AddIcon } from '@chakra-ui/icons';
 import { PATH } from '~/lib/constants/nav-constants';
+import { sortByName } from '~/lib/helpers/general';
 
 interface LoaderData {
   data: Bill[];
@@ -26,6 +27,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   // NOTE: getUserByRequestToken is required for each page that
   // requires the session/authorized user to access row level data
   const { user } = await getUserByRequestToken(request);
+  console.log('user ID ====> ', user.id);
   if (!user) {
     throw redirect(PATH.LOGIN);
   }
@@ -58,7 +60,7 @@ const ViewBill: React.FC<ViewBillProps> = ({ name }) => {
           />
         </HStack>
         <Accordion allowToggle px="4">
-          {bills.map((bill, i) => (
+          {sortByName(bills).map((bill, i) => (
             <BillRow key={bill.id} isAlt={i % 2 === 0} bill={bill} />
           ))}
         </Accordion>

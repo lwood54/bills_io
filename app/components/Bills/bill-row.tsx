@@ -5,14 +5,23 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Button,
   HStack,
   IconButton,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { Bill } from '~/lib/types/bills-types';
 import { formatToMoney } from '~/lib/helpers/bills-helpers';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
-import { useNavigate } from 'remix';
+import { Form, useNavigate } from 'remix';
 import { PATH } from '~/lib/constants/nav-constants';
 
 interface BillRowProps {
@@ -21,13 +30,12 @@ interface BillRowProps {
 }
 const BillRow: React.FC<BillRowProps> = ({ bill, isAlt }) => {
   const navigate = useNavigate();
-  const handleRemoveBill = () => {
-    console.log('remove bill');
-  };
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleEditBill = () => {
     navigate(PATH.BILLS.EDIT.replace(':uuid', `${bill.id}`));
   };
+
   return (
     <AccordionItem
       bgColor={isAlt ? 'cyan.50' : 'cyan.600'}
@@ -53,21 +61,67 @@ const BillRow: React.FC<BillRowProps> = ({ bill, isAlt }) => {
               colorScheme="cyan"
               color="cyan.50"
               rounded="full"
-              aria-label="delete-bill"
-              icon={<DeleteIcon />}
-              onClick={handleRemoveBill}
-            />
-            <IconButton
-              colorScheme="cyan"
-              color="cyan.50"
-              rounded="full"
               aria-label="edit-bill"
               icon={<EditIcon />}
               onClick={handleEditBill}
             />
+            <IconButton
+              colorScheme="red"
+              color="red.50"
+              rounded="full"
+              aria-label="delete-bill"
+              icon={<DeleteIcon />}
+              onClick={onOpen}
+            />
           </HStack>
         </HStack>
       </AccordionPanel>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent rounded="sm">
+          <ModalHeader>Remove Bill Confirmation</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              Are you sure you want to remove{' '}
+              <Text as="span" fontWeight="semibold">
+                "{bill.name}"
+              </Text>
+              ?
+            </Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              size="sm"
+              borderBottomWidth="4px"
+              colorScheme="blue"
+              mr={3}
+              onClick={onClose}
+              rounded="sm"
+              variant="outline"
+            >
+              Close
+            </Button>
+            <Form
+              method="post"
+              action={PATH.BILLS.DELETE.replace(':uuid', `${bill.id}`)}
+              reloadDocument
+            >
+              <Button
+                size="sm"
+                rounded="sm"
+                borderBottomWidth="4px"
+                borderBottomColor="red.600"
+                variant="solid"
+                colorScheme="red"
+                type="submit"
+              >
+                Remove Bill
+              </Button>
+            </Form>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </AccordionItem>
   );
 };
