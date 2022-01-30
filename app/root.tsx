@@ -11,7 +11,7 @@ import {
 } from "remix";
 import type { LinksFunction, LoaderFunction } from "remix";
 import { isAuthenticated } from "./lib/auth";
-import appStyleUrl from "~/styles/app.css";
+import appStyleUrl from "./styles/app.css";
 
 export let links: LinksFunction = () => {
   return [
