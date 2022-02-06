@@ -12,6 +12,7 @@ import {
 import type { LinksFunction, LoaderFunction } from "remix";
 import { isAuthenticated } from "./lib/auth";
 import appStyleUrl from "./styles/app.css";
+import Nav from "./lib/components/Nav/nav";
 
 export let links: LinksFunction = () => {
   return [
@@ -32,7 +33,9 @@ export default function App() {
   const data = useLoaderData();
   return (
     <Document>
-      <Outlet />
+      <Nav isLoggedIn={data.isAuthorized}>
+        <Outlet />
+      </Nav>
     </Document>
   );
 }
