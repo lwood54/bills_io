@@ -1,5 +1,7 @@
 import { ActionFunction, Form, useTransition } from "remix";
 import { useActionData, MetaFunction, redirect } from "remix";
+import LoginForm from "~/lib/components/Auth/login-form";
+import { S_FORM } from "~/lib/constants/styles";
 import { supabaseToken } from "../../cookies";
 import { supabase } from "../../lib/supabase/supabase.server";
 
@@ -36,49 +38,11 @@ const Login = () => {
   const { state } = useTransition();
 
   return (
-    <div className="flex bg-gradient-to-r from-cyan-500 to-blue-500 w-full justify-center items-center px-4 py-10 h-screen">
-      <div className="card glass lg:card-side text-neutral-content">
-        <div className="w-1/2">
-          <figure className="p-6">
-            <img src="/images/ud_login.svg" className="rounded-lg shadow-lg" />
-          </figure>
-        </div>
-        <div className="w-lg card-body form-control">
-          <h2 className="card-title">Login</h2>
-          <Form method="post">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-neutral-content">Email</span>
-              </label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                className="input input-bordered rounded-sm border-sky-500 border-b-4 border-b-sky-700"
-              />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-neutral-content">
-                  Password
-                </span>
-              </label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                className="input input-bordered rounded-sm border-sky-500 border-b-4 border-b-sky-700"
-              />
-            </div>
-            <div className="card-actions">
-              <button className="btn glass rounded-sm" type="submit">
-                Submit
-              </button>
-            </div>
-          </Form>
-        </div>
-      </div>
-    </div>
+    <LoginForm
+      isLoginPage
+      errorMessage={actionData?.error?.message}
+      isSubmitting={state === "submitting"}
+    />
   );
 };
 
