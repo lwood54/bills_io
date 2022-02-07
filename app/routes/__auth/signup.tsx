@@ -1,5 +1,6 @@
 import { ActionFunction, useTransition } from "remix";
 import { useActionData, MetaFunction, redirect } from "remix";
+import LoginForm from "~/lib/components/Auth/login-form";
 import { supabase } from "../../lib/supabase/supabase.server";
 
 export let meta: MetaFunction = () => {
@@ -25,7 +26,13 @@ const SignUp = () => {
   const actionData = useActionData();
   const { state } = useTransition();
 
-  return <div>sign up page</div>;
+  return (
+    <LoginForm
+      isLoginPage={false}
+      errorMessage={actionData?.error?.message}
+      isSubmitting={state === "submitting"}
+    />
+  );
 };
 
 export default SignUp;

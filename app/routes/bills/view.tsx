@@ -37,17 +37,11 @@ const ViewBill: React.FC<ViewBillProps> = ({ name }) => {
     navigate(PATH.BILLS.ADD);
   };
   return (
-    <div
-      className="flex items-center w-full px-4 py-10 bg-cover card bg-base-200 h-screen"
-      style={{
-        backgroundImage: "url('images/financial_bg.jpeg')",
-      }}
-    >
+    <div className="flex bg-gradient-to-r from-emerald-500 to-sky-500 w-full justify-center items-center px-4 py-10 h-screen">
       <div className="card glass xl:card-side text-neutral-content">
         <figure className="p-6">
           <img
             src="images/ud_person_finance.svg"
-            // src="https://picsum.photos/id/1005/300/200"
             className="rounded-lg shadow-lg"
           />
         </figure>
@@ -64,6 +58,32 @@ const ViewBill: React.FC<ViewBillProps> = ({ name }) => {
         </div>
       </div>
     </div>
+    // <div
+    //   className="flex items-center w-full px-4 py-10 bg-cover card bg-base-200 h-screen"
+    // style={{
+    //   backgroundImage: "url('images/financial_bg.jpeg')",
+    // }}
+    // >
+    //   <div className="card glass xl:card-side text-neutral-content">
+    //     <figure className="p-6">
+    //       <img
+    //         src="images/ud_person_finance.svg"
+    //         className="rounded-lg shadow-lg"
+    //       />
+    //     </figure>
+    //     <div className="max-w-md card-body">
+    //       <h2 className="card-title">Glass</h2>
+    //       <p>
+    //         Rerum reiciendis beatae tenetur excepturi aut pariatur est eos. Sit
+    //         sit necessitatibus veritatis sed molestiae voluptates incidunt iure
+    //         sapiente.
+    //       </p>
+    //       <div className="card-actions">
+    //         <button className="btn glass rounded-full">Get Started</button>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
     // <Container maxW="860px" justifyContent="center">
     //   <Stack>
     //     <HStack p="4" justifyContent="space-between">

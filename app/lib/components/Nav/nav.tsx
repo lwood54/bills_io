@@ -21,7 +21,7 @@ const Nav: React.FC<NavProps> = ({ children, isLoggedIn }) => {
       <div
         className={`${
           isMenuOpen ? "visible" : "invisible"
-        } fixed top-0 left-0 bg-slate-600/50 h-screen w-full`}
+        } z-20 fixed top-0 left-0 bg-slate-600/50 h-screen w-full`}
         onClick={toggleMenu}
       />
       {children}
