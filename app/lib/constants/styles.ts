@@ -7,3 +7,7 @@ export const S_NAV = {
   MENU_ITEM:
     "bg-sky-400 text-sky-50 border-none w-full hover:bg-sky-50 hover:text-sky-600 btn rounded-sm",
 };
+
+export const S_TEXT = {
+  H3: "text-lg text-sky-800",
+};

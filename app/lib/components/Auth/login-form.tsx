@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Form } from "remix";
-import { S_FORM } from "~/lib/constants/styles";
+import FormInput from "../Base/form-input";
 
 interface LoginFormProps {
   errorMessage: string;
@@ -37,30 +37,8 @@ const LoginForm: React.FC<LoginFormProps> = ({
           <h2 className="card-title">{isLoginPage ? "Login" : "Sign Up"}</h2>
           {errorMessage && <h2>{errorMessage}</h2>}
           <Form method="post">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-neutral-content">Email</span>
-              </label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                className={S_FORM.INPUT}
-              />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-neutral-content">
-                  Password
-                </span>
-              </label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                className={S_FORM.INPUT}
-              />
-            </div>
+            <FormInput label="Email" type="email" name="email" />
+            <FormInput label="Password" type="password" name="password" />
             <div className="card-actions">
               <button
                 className="btn glass rounded-sm"

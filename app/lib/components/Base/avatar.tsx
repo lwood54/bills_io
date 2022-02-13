@@ -9,7 +9,7 @@ const Avatar: React.FC<AvatarProps> = ({
   customClass = "mb-8 rounded-full w-32 h-32",
 }) => {
   return (
-    <div className="avatar">
+    <div className="avatar h-28">
       <div className={customClass}>
         <img src={`/images/avatars/${avatarUrl}`} />
       </div>
