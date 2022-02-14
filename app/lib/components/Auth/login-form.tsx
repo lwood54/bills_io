@@ -15,7 +15,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 }) => {
   return (
     <div className={`flex w-full items-center justify-center`}>
-      <div className="card glass md:card-side h-3/4 p-2 overflow-scroll text-neutral-content">
+      <div className="card glass md:card-side h-3/4 p-2 overflow-auto text-neutral-content">
         <div className="w-1/2">
           <figure className="p-6">
             <img
