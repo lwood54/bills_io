@@ -103,77 +103,79 @@ export default function ProfileEdit() {
   }
 
   return (
-    <div className="flex justify-center gap-4 w-full">
-      <div className="p-4 mt-4">
-        {avatarUrl &&
-          (avatarLoading ? <Spinner /> : <Avatar avatarUrl={avatarUrl} />)}
-        <input
-          ref={avatarRef}
-          style={{ display: "none" }}
-          type="file"
-          id="avatar-upload"
-          name="avatar-upload"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-        <UploadIcon
-          customCss="h-6 w-6 p-1 stroke-cyan-800 cursor-pointer hover:bg-cyan-800 hover:stroke-cyan-50 rounded-full"
-          onClick={() => avatarRef.current.click()}
-        />
-      </div>
-      <div className="flex-column flex-1 space-y-2 p-4">
-        <Form method="post">
+    <div className="flex justify-center">
+      <div className="flex-column sm:flex justify-center gap-4 w-full md:w-3/4">
+        <div className="px-4 sm:p-4 mt-4">
+          {avatarUrl &&
+            (avatarLoading ? <Spinner /> : <Avatar avatarUrl={avatarUrl} />)}
           <input
-            // NOTE: adds url string to hidden field to submit string to db
-            type="hidden"
-            name="avatar"
-            id="avatar-url-value"
-            value={avatarUrl}
+            ref={avatarRef}
+            style={{ display: "none" }}
+            type="file"
+            id="avatar-upload"
+            name="avatar-upload"
+            accept="image/*"
+            onChange={handleFileChange}
           />
-          <div className="flex-column space-y-2 p-4">
-            <FormInput
-              defaultValue={profile?.username}
-              isColorInverted
-              label="Username"
-              name="username"
-              type="text"
+          <UploadIcon
+            customCss="h-6 w-6 p-1 stroke-cyan-800 cursor-pointer hover:bg-cyan-800 hover:stroke-cyan-50 rounded-full"
+            onClick={() => avatarRef.current.click()}
+          />
+        </div>
+        <div className="flex-column  flex-1 space-y-2">
+          <Form method="post">
+            <input
+              // NOTE: adds url string to hidden field to submit string to db
+              type="hidden"
+              name="avatar"
+              id="avatar-url-value"
+              value={avatarUrl}
             />
-            <FormInput
-              defaultValue={user?.email}
-              isColorInverted
-              label="Email"
-              name="email"
-              type="email"
-            />
-            <FormInput
-              icon={
-                <EditIcon
-                  customClass="h-6 w-6 stroke-cyan-800 cursor-pointer hover:bg-cyan-800 hover:stroke-cyan-50 rounded-full p-1"
-                  onClick={() => setIsPasswordEdit(!isPasswordEdit)}
-                />
-              }
-              isColorInverted
-              isDisabled={!isPasswordEdit}
-              label="Password"
-              name="password"
-              type="password"
-            />
-            <FormInput
-              defaultValue={profile?.website}
-              isColorInverted
-              label="Website"
-              name="website"
-              type="text"
-            />
-            <button
-              className="btn rounded-sm bg-cyan-800 hover:bg-cyan-600 border-none"
-              disabled={transition.state === "submitting"}
-              type="submit"
-            >
-              Save Profile Changes
-            </button>
-          </div>
-        </Form>
+            <div className="flex-column space-y-2 p-4">
+              <FormInput
+                defaultValue={profile?.username}
+                isColorInverted
+                label="Username"
+                name="username"
+                type="text"
+              />
+              <FormInput
+                defaultValue={user?.email}
+                isColorInverted
+                label="Email"
+                name="email"
+                type="email"
+              />
+              <FormInput
+                icon={
+                  <EditIcon
+                    customClass="h-6 w-6 stroke-cyan-800 cursor-pointer hover:bg-cyan-800 hover:stroke-cyan-50 rounded-full p-1"
+                    onClick={() => setIsPasswordEdit(!isPasswordEdit)}
+                  />
+                }
+                isColorInverted
+                isDisabled={!isPasswordEdit}
+                label="Password"
+                name="password"
+                type="password"
+              />
+              <FormInput
+                defaultValue={profile?.website}
+                isColorInverted
+                label="Website"
+                name="website"
+                type="text"
+              />
+              <button
+                className="btn rounded-sm bg-cyan-800 hover:bg-cyan-600 border-none"
+                disabled={transition.state === "submitting"}
+                type="submit"
+              >
+                Save Profile Changes
+              </button>
+            </div>
+          </Form>
+        </div>
       </div>
     </div>
   );

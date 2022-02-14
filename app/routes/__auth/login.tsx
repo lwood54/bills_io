@@ -38,11 +38,16 @@ const Login = () => {
   const { state } = useTransition();
 
   return (
-    <LoginForm
-      isLoginPage
-      errorMessage={actionData?.error?.message}
-      isSubmitting={state === "submitting"}
-    />
+    <div
+      style={{ height: "calc(100vh - 64px)" }}
+      className="flex justify-center w-full bg-gradient-to-r from-sky-600 to-teal-600 p-4"
+    >
+      <LoginForm
+        isLoginPage
+        errorMessage={actionData?.error?.message}
+        isSubmitting={state === "submitting"}
+      />
+    </div>
   );
 };
 

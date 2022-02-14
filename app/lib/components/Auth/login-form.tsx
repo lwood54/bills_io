@@ -13,14 +13,9 @@ const LoginForm: React.FC<LoginFormProps> = ({
   isLoginPage,
   isSubmitting,
 }) => {
-  const transitionColors = isLoginPage
-    ? "from-sky-600 to-teal-600"
-    : "from-teal-600 to-sky-600";
   return (
-    <div
-      className={`flex bg-gradient-to-r ${transitionColors} w-full justify-center items-center px-4 py-10 h-screen`}
-    >
-      <div className="card glass lg:card-side text-neutral-content">
+    <div className={`flex w-full items-center justify-center`}>
+      <div className="card glass md:card-side h-3/4 p-2 overflow-scroll text-neutral-content">
         <div className="w-1/2">
           <figure className="p-6">
             <img
@@ -36,7 +31,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
         <div className="w-lg card-body form-control">
           <h2 className="card-title">{isLoginPage ? "Login" : "Sign Up"}</h2>
           {errorMessage && <h2>{errorMessage}</h2>}
-          <Form method="post">
+          <Form method="post" className="pb-4">
             <FormInput label="Email" type="email" name="email" />
             <FormInput label="Password" type="password" name="password" />
             <div className="card-actions">
