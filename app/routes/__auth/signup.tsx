@@ -27,11 +27,16 @@ const SignUp = () => {
   const { state } = useTransition();
 
   return (
-    <LoginForm
-      isLoginPage={false}
-      errorMessage={actionData?.error?.message}
-      isSubmitting={state === "submitting"}
-    />
+    <div
+      style={{ height: "calc(100vh - 64px)" }}
+      className="flex justify-center w-full bg-gradient-to-r from-teal-600 to-sky-600 p-4"
+    >
+      <LoginForm
+        isLoginPage={false}
+        errorMessage={actionData?.error?.message}
+        isSubmitting={state === "submitting"}
+      />
+    </div>
   );
 };
 
