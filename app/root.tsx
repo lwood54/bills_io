@@ -14,7 +14,7 @@ import { isAuthenticated } from "./lib/auth";
 import appStyleUrl from "./styles/app.css";
 import Nav from "./lib/components/Nav/nav";
 
-export let links: LinksFunction = () => {
+export const links: LinksFunction = () => {
   return [
     {
       rel: "preconnect",
@@ -40,7 +40,7 @@ export default function App() {
   );
 }
 
-export let loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = async ({ request }) => {
   const isAuth = await isAuthenticated(request);
   return {
     isAuthorized: isAuth,
@@ -94,7 +94,7 @@ export function CatchBoundary() {
       default:
         throw new Error(caught.data || caught.statusText);
     }
-  }, []);
+  }, [caught.data, caught.status, caught.statusText]);
 
   return (
     <Document title={`${caught.status} ${caught.statusText}`}>

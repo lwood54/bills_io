@@ -29,7 +29,7 @@ const FormInput: React.FC<FormInputProps> = ({
         <label className="label">
           <span
             className={`label-text ${
-              isColorInverted ? "text-sky-800" : "text-neutral-content"
+              isColorInverted ? "text-neutral-content" : "text-sky-800"
             }`}
           >
             {label}

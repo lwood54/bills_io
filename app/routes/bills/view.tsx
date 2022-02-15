@@ -7,6 +7,7 @@ import { PostgrestError, User } from "@supabase/supabase-js";
 import { Bill } from "~/lib/types/bills-types";
 import { PATH } from "~/lib/constants/nav-constants";
 import { sortByName } from "~/lib/helpers/general";
+import PageContainer from "~/lib/components/Base/page-container";
 
 interface LoaderData {
   data: Bill[];
@@ -22,7 +23,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   if (!user) {
     throw redirect(PATH.LOGIN);
   }
-  let { data, error } = await supabase.from("bills").select("*");
+  const { data, error } = await supabase.from("bills").select("*");
   return { data, error, user };
 };
 
@@ -37,7 +38,7 @@ const ViewBill: React.FC<ViewBillProps> = ({ name }) => {
     navigate(PATH.BILLS.ADD);
   };
   return (
-    <div className="flex bg-gradient-to-r from-emerald-500 to-sky-500 w-full justify-center items-center px-4 py-10 h-screen">
+    <PageContainer gradientFrom="sky-500" gradientTo="emerald-500">
       <div className="card glass xl:card-side text-neutral-content">
         <figure className="p-6">
           <img
@@ -57,7 +58,7 @@ const ViewBill: React.FC<ViewBillProps> = ({ name }) => {
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
     // <div
     //   className="flex items-center w-full px-4 py-10 bg-cover card bg-base-200 h-screen"
     // style={{
