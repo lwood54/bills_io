@@ -134,14 +134,12 @@ export default function ProfileEdit() {
             <div className="flex-column space-y-2 p-4">
               <FormInput
                 defaultValue={profile?.username}
-                isColorInverted
                 label="Username"
                 name="username"
                 type="text"
               />
               <FormInput
                 defaultValue={user?.email}
-                isColorInverted
                 label="Email"
                 name="email"
                 type="email"
@@ -153,7 +151,6 @@ export default function ProfileEdit() {
                     onClick={() => setIsPasswordEdit(!isPasswordEdit)}
                   />
                 }
-                isColorInverted
                 isDisabled={!isPasswordEdit}
                 label="Password"
                 name="password"
@@ -161,7 +158,6 @@ export default function ProfileEdit() {
               />
               <FormInput
                 defaultValue={profile?.website}
-                isColorInverted
                 label="Website"
                 name="website"
                 type="text"

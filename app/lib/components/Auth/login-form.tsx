@@ -32,8 +32,18 @@ const LoginForm: React.FC<LoginFormProps> = ({
           <h2 className="card-title">{isLoginPage ? "Login" : "Sign Up"}</h2>
           {errorMessage && <h2>{errorMessage}</h2>}
           <Form method="post" className="pb-4">
-            <FormInput label="Email" type="email" name="email" />
-            <FormInput label="Password" type="password" name="password" />
+            <FormInput
+              isColorInverted
+              label="Email"
+              type="email"
+              name="email"
+            />
+            <FormInput
+              isColorInverted
+              label="Password"
+              type="password"
+              name="password"
+            />
             <div className="card-actions">
               <button
                 className="btn glass rounded-sm"
